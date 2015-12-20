@@ -42,22 +42,37 @@ var Article = mongoose.model('article', articleSchema);
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
-    var articles = {};
-    Article.find({},function(err, articles) {
+    var data = {};
+
+    Article.find({}).
+    sort( {"_id" : -1}).
+    limit(10).
+    exec(function(err, articles) {
         if (err) return console.error(err);
-        this.articles = articles;
-        console.log(JSON.stringify(articles));
+        data = articles;
+
+        //console.log(data);
+        res.render('board_list', {
+            title: 'Node.js Express + MongoDB Board',
+            articles: data
+        });
     })
 
-//TODO JSON 문법 공부 다시하자
-    res.render('board_list', {
-        title: 'Node.js Express + MongoDB Board',
-        articles : JSON.stringify(articles)
-    });
 });
 
 router.get('/:id', function(req, res, next) {
-    res.send('article', { id: req.params.id, writer: "The Writer", title: "Title", contents: "Contents", date: new Date() });
+
+   Article.find({"_id": req.params.id},function(err, articles) {
+        if (articles != null) {
+            console.log(articles)
+            res.render('article', {
+                data: articles
+            });
+
+        } else {
+            callback();
+        }
+    })
 });
 
 router.post('/write', function(req, res, next) {
@@ -81,7 +96,7 @@ router.post('/write', function(req, res, next) {
         }
     })
 
-    res.render('commit_result', { writer: writer, title: title, contents: contents });
+    res.redirect('/board');
 
 });
 

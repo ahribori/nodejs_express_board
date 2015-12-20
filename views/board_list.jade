@@ -5,7 +5,6 @@ block content
 
     h1= title
     p Welcome to #{title}
-    p DATA : #{articles}
     table.table.table-hover
         thead
             tr
@@ -15,13 +14,15 @@ block content
                 th Hits
                 th Date
         tbody
+
+
         for article in articles
-            tr
+            tr(onclick="javascript:location.href='/board/#{article._id}'")
                 td #{article._id}
                 td #{article.writer}
-                td hello
-                td hello
-                td new Date
+                td #{article.title}
+                td #{article.hits}
+                td #{moment(article.date).format("YYYY년 MM월 DD일_hh:mm:ss")}
 
     form#writeForm(action="board/write" method="post")
         div.form-group

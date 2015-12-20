@@ -1,4 +1,12 @@
 extends layout
 
 block content
-    h1= writer
+    -var article = data[0];
+    h3
+        span.label.label-primary _id : #{article._id}
+        &nbsp;&nbsp;
+        span.label.label-success #{article.writer}
+    h1= article.title
+    hr
+    div #{article.contents}
+    hr
