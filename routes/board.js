@@ -65,10 +65,15 @@ router.get('/:id', function(req, res, next) {
    Article.find({"_id": req.params.id},function(err, articles) {
         if (articles != null) {
             console.log(articles)
+
+            Article.update({"_id": articles[0]._id}, {hits: 1}, function(err){
+                if (err) console.log(err);
+                console.log('uphits');
+            })
+
             res.render('article', {
                 data: articles
             });
-
         } else {
             callback();
         }
